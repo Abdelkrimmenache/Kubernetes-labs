@@ -1,0 +1,121 @@
+# Lab 1 — Kubernetes Deployments and Pods
+
+## Objective
+
+Learn how Kubernetes runs containerized applications using Pods and Deployments, and understand how Kubernetes maintains the desired application state.
+
+## Environment
+
+- Platform: AWS EC2
+- Operating system: Ubuntu
+- Kubernetes: v1.37.1
+- Container runtime: containerd
+- Application: NGINX
+
+## 1. Create a Deployment
+
+```bash
+kubectl create deployment nginx-lab --image=nginx:stable
+```
+
+This command creates a Deployment named `nginx-lab` using the `nginx:stable` container image.
+
+A Deployment manages a ReplicaSet, which manages the application's Pods.
+
+### Architecture
+
+```text
+Deployment: nginx-lab
+        |
+        v
+    ReplicaSet
+        |
+        v
+     NGINX Pod
+        |
+        v
+  NGINX container
+```
+
+## 2. Verify the Deployment
+
+```bash
+kubectl get deployments
+kubectl get pods
+kubectl describe deployment nginx-lab
+```
+
+These commands help verify that the Deployment exists, inspect its Pods, and show detailed information about the Deployment.
+
+Important fields include:
+
+- `READY`: number of ready replicas versus desired replicas.
+- `AVAILABLE`: replicas available to serve the application.
+- `IMAGE`: container image used by the application.
+- `REPLICAS`: desired number of Pod replicas.
+
+## 3. Scale the Application
+
+```bash
+kubectl scale deployment nginx-lab --replicas=3
+```
+
+Verify the result:
+
+```bash
+kubectl get deployments
+kubectl get pods -o wide
+```
+
+Kubernetes should create three Pod replicas for the Deployment.
+
+Scaling is useful when an application needs more instances to handle traffic or improve availability.
+
+## 4. Test Self-Healing
+
+List the Pods:
+
+```bash
+kubectl get pods
+```
+
+Delete one Pod belonging to the Deployment:
+
+```bash
+kubectl delete pod <POD_NAME>
+```
+
+Replace `<POD_NAME>` with the name of one of the NGINX Pods.
+
+Check the Pods again:
+
+```bash
+kubectl get pods
+```
+
+Kubernetes should create a replacement Pod to maintain the desired replica count.
+
+This demonstrates self-healing: the Deployment's controllers continuously work to reconcile the actual state with the desired state.
+
+## 5. Inspect Application Logs
+
+```bash
+kubectl logs <POD_NAME>
+```
+
+Use an existing NGINX Pod name. This command displays the container logs and can help troubleshoot application behavior.
+
+## Key Concepts Learned
+
+- **Pod:** the smallest deployable unit in Kubernetes.
+- **Deployment:** manages application replicas through a ReplicaSet.
+- **ReplicaSet:** maintains the desired number of matching Pods.
+- **Scaling:** changes the desired number of replicas.
+- **Self-healing:** Kubernetes replaces missing Pods to restore the desired state.
+- **Declarative reconciliation:** Kubernetes continuously works toward the desired state defined by its resources.
+
+## Important Takeaway
+
+Kubernetes does not merely start a container and leave it running. Its controllers continuously monitor the application's state and take action when the actual state differs from the desired state.
+
+A Deployment is generally preferred over manually creating standalone Pods for applications that need managed replicas and self-healing.

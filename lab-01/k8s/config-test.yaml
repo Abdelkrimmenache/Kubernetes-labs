@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: config-test
+      image: busybox:1.36
+      envFrom:
+        - configMapRef:
+            name: app-config
+      command:
+        - sh
+        - -c
+        - |
+          echo "App: $APP_NAME"
+          echo "Environment: $APP_ENV"
+          echo "Log level: $LOG_LEVEL"
+          sleep 3600
