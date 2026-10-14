@@ -6,7 +6,22 @@ Understand how Kubernetes Services provide a stable network endpoint for Pods an
 
 ## Prerequisites
 
-The `nginx-lab` Deployment created in Lab 1 must exist and have at least one ready Pod.
+The `nginx-lab` Deployment created in Lab 1 must exist and have at least one ready Pod. If it does not, create it from this folder:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+## Files
+
+- `deployment.yaml`: the `nginx-lab` Deployment (3 replicas, label `app=nginx-lab`).
+- `service.yaml`: the `nginx-service` ClusterIP Service, equivalent to the `kubectl expose` command in step 2.
+
+To create the Service declaratively instead of using `kubectl expose`:
+
+```bash
+kubectl apply -f service.yaml
+```
 
 ## 1. Inspect Existing Services
 

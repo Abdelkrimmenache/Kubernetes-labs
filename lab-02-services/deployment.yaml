@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-lab
+  labels:
+    app: nginx-lab
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-lab
+  template:
+    metadata:
+      labels:
+        app: nginx-lab
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:stable
+          ports:
+            - containerPort: 80

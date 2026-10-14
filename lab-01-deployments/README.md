@@ -105,6 +105,16 @@ kubectl logs <POD_NAME>
 
 Use an existing NGINX Pod name. This command displays the container logs and can help troubleshoot application behavior.
 
+## 6. Declarative Alternative
+
+The same Deployment is defined in `deployment.yaml`:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+To scale declaratively, change `replicas` in the file and apply it again.
+
 ## Key Concepts Learned
 
 - **Pod:** the smallest deployable unit in Kubernetes.
